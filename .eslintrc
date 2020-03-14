@@ -4,7 +4,9 @@
       "commonjs": true,
       "es6": true
     },
-    "globals": {},
+    "globals": {
+      "__dirname": true
+    },
     "extends": ["eslint:recommended", "eslint-config-prettier", 'plugin:@typescript-eslint/recommended'],
     "parser": "@typescript-eslint/parser",
     "parserOptions": {
