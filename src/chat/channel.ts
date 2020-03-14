@@ -29,6 +29,23 @@ class Channel {
       this.channel.subscriptions[id] = this.broadcast(id);
       this.channel.on('broadcast', this.channel.subscriptions[id]);
     });
+
+    this.channel.on('leave', (id: string) => {
+      this.channel.removeListener('broadcast', this.channel.subscriptions[id]);
+
+      delete this.channel.subscriptions[id];
+
+      const message = `${id} has left the chatroom.\n`;
+
+      this.channel.emit('broadcast', id, message);
+    });
+
+    this.channel.on('shutdown', () => {
+      const message = 'The server has shout down.\n';
+
+      this.channel.emit('broadcast', '', message);
+      this.channel.removeAllListeners('broadcast');
+    });
   }
 
   private broadcast = (id: string): Broadcast => (clientId, message): void => {

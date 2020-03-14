@@ -21,7 +21,15 @@ class Server {
       socket.on('data', data => {
         const message = data.toString();
 
+        if (message.trim() === 'shutdown') {
+          this.channel.emit('shutdown');
+        }
+
         this.channel.emit('broadcast', id, message);
+      });
+
+      socket.on('close', () => {
+        this.channel.emit('leave', id);
       });
     });
 
