@@ -1,6 +1,7 @@
 const webpack = require('webpack');
 const path = require('path');
 const TsconfigPathsPlugin = require('tsconfig-paths-webpack-plugin');
+const ConfigWebpackPlugin = require('config-webpack');
 const dotenv = require('dotenv');
 
 dotenv.config();
@@ -11,7 +12,13 @@ const resolvePlugins = [
   }),
 ];
 
-const plugins = [new webpack.ProgressPlugin()];
+const plugins = [
+  new webpack.ProgressPlugin(),
+  new ConfigWebpackPlugin(),
+  new webpack.DefinePlugin({
+    'process.env.config': JSON.stringify(require('config')),
+  }),
+];
 
 const tsLoader = {
   test: /\.(ts|js)$/,

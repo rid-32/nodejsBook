@@ -5,7 +5,8 @@
       "es6": true
     },
     "globals": {
-      "__dirname": true
+      "__dirname": true,
+      "process": true,
     },
     "extends": ["eslint:recommended", "eslint-config-prettier", 'plugin:@typescript-eslint/recommended'],
     "parser": "@typescript-eslint/parser",
