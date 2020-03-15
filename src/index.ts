@@ -1,5 +1,15 @@
-import Server from 'chat';
+// import Watcher from 'watcher';
+//
+// const watcher = new Watcher('/tmp/folder');
+//
+// watcher.on('process', (file: string) => {
+//   console.log({ file });
+// });
+//
+// watcher.start();
 
-const server = new Server();
-
-server.listen(process.env.config['port']);
+// import Server from 'chat';
+//
+// const server = new Server();
+//
+// server.listen(process.env.config['port']);

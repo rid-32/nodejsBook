@@ -13,7 +13,7 @@ type SubscriptionsType = {
 
 export type ChannelType = EventEmitter;
 
-const maxUsers = process.env.config['maxUsers'];
+const maxUsers: number = process.env.config['maxUsers'];
 
 class Channel {
   public channel: ChannelType;
