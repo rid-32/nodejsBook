@@ -13,6 +13,8 @@ type SubscriptionsType = {
 
 export type ChannelType = EventEmitter;
 
+const maxUsers = process.env.config['maxUsers'];
+
 class Channel {
   public channel: ChannelType;
   private clients: ClientsType;
@@ -23,7 +25,7 @@ class Channel {
     this.clients = {};
     this.subscriptions = {};
 
-    this.channel.setMaxListeners(50);
+    this.channel.setMaxListeners(maxUsers);
 
     this.channel.on('join', (id: string, socket: net.Socket): void => {
       const usersAmount = this.channel.listeners('broadcast').length;
