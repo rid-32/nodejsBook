@@ -11,29 +11,28 @@ type SubscriptionsType = {
   [id: string]: Broadcast;
 };
 
-export type ChannelType = EventEmitter & {
-  clients?: ClientsType;
-  subscriptions?: SubscriptionsType;
-};
+export type ChannelType = EventEmitter;
 
 class Channel {
   public channel: ChannelType;
+  private clients: ClientsType;
+  private subscriptions: SubscriptionsType;
 
   constructor() {
     this.channel = new EventEmitter();
-    this.channel.clients = {};
-    this.channel.subscriptions = {};
+    this.clients = {};
+    this.subscriptions = {};
 
     this.channel.on('join', (id: string, socket: net.Socket): void => {
-      this.channel.clients[id] = socket;
-      this.channel.subscriptions[id] = this.broadcast(id);
-      this.channel.on('broadcast', this.channel.subscriptions[id]);
+      this.clients[id] = socket;
+      this.subscriptions[id] = this.broadcast(id);
+      this.channel.on('broadcast', this.subscriptions[id]);
     });
 
     this.channel.on('leave', (id: string) => {
-      this.channel.removeListener('broadcast', this.channel.subscriptions[id]);
+      this.channel.removeListener('broadcast', this.subscriptions[id]);
 
-      delete this.channel.subscriptions[id];
+      delete this.subscriptions[id];
 
       const message = `${id} has left the chatroom.\n`;
 
@@ -51,7 +50,7 @@ class Channel {
   private broadcast = (id: string): Broadcast => (clientId, message): void => {
     if (clientId === id) return;
 
-    this.channel.clients[id].write(message);
+    this.clients[id].write(message);
   };
 }
 
