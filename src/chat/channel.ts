@@ -23,7 +23,16 @@ class Channel {
     this.clients = {};
     this.subscriptions = {};
 
+    this.channel.setMaxListeners(50);
+
     this.channel.on('join', (id: string, socket: net.Socket): void => {
+      const usersAmount = this.channel.listeners('broadcast').length;
+      const welcomeMessage = usersAmount
+        ? `Пользователей онлайн: ${usersAmount}\n`
+        : 'Вы единственный пользователь в чате\n';
+
+      socket.write(welcomeMessage);
+
       this.clients[id] = socket;
       this.subscriptions[id] = this.broadcast(id);
       this.channel.on('broadcast', this.subscriptions[id]);
@@ -34,7 +43,7 @@ class Channel {
 
       delete this.subscriptions[id];
 
-      const message = `${id} has left the chatroom.\n`;
+      const message = `${id} покинул чат.\n`;
 
       this.channel.emit('broadcast', id, message);
     });
